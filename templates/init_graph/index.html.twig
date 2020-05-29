@@ -1,0 +1,216 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Graphique(s) des données initiales{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+
+    var stringTitle = "Représentation graphique de la répartition de la population selon ";
+
+    var data = [];
+    {% for columns in dictTot %}
+        var values = [];
+        {% for values in columns %}
+            if ("{{ values }}" == ""){
+                values.push(null);
+            }else {
+                values.push("{{ values }}");
+            }
+            {% endfor %}
+        data.push(values);
+    {% endfor %}
+
+    var indexes = [];
+    {% for columns in dictIndex %}
+        var values = [];
+        {% for values in columns %}
+            if ("{{ values }}" == ""){
+                values.push(null);
+            }else {
+                values.push("{{ values }}");
+            }
+        {% endfor %}
+        indexes.push(values);
+    {% endfor %}
+
+    var labels = [];
+    {% for dat in tabSelectedColumns %}
+        labels.push("{{ dat }}");
+    {% endfor %}
+
+
+
+    var dictLabel = new Map();
+    var id = [];
+    var label =[];
+    {% for label in labelsSymp %}
+         id.push({{ label["id"] }});
+        label.push("{{ label["label"] }}");
+
+    {% endfor %}
+    var sizeDictLabel = {{ labelsSympSize }};
+    for(let i = 0 ; i<sizeDictLabel; i++){
+        dictLabel.set(id[i],label[i]);
+    }
+
+
+    function getXAxesString(labelString){
+        switch (labelString) {
+            case "agepat" :
+                return "Années";
+            case "sexepat":
+                return "Type de sexe";
+            case "poidspat" :
+                return "Poids (En Kg)";
+            case "taillepat":
+                return "Taille (en cm)";
+            case "sympprinc":
+                return "Libellé du symptôme principal";
+
+        }
+    }
+
+    function getTitleString( labelString){
+        switch (labelString) {
+            case "agepat" :
+                return stringTitle+"l'âge ";
+            case "sexepat":
+                return stringTitle+"le sexe ";
+            case "poidspat" :
+                return stringTitle+"le poids  ";
+            case "taillepat":
+                return stringTitle+"la taille";
+            case "sympprinc":
+                return stringTitle+"le symptôme du patient ";
+        }
+    }
+    var labelIndexes = [].concat(indexes);
+
+    function putLabelOnIndexes(arrayOfLabel){
+        for(var [clef, valeur] of dictLabel){
+            for (var i = 0 ; i<arrayOfLabel.length;i++){
+                if (clef == arrayOfLabel[i]){
+                    arrayOfLabel[i] = valeur;
+                }
+                else{
+                    arrayOfLabel[i]=arrayOfLabel[i];
+                }
+            }
+        }
+    }
+
+    function verifyTypeOfLabel(myLabel) {
+        if (myLabel== "sexepat" || myLabel=="sympprinc")
+            return true;
+        else{
+            return false;
+        }
+
+    }
+    function changeNameLabel() {
+        for (let i =0 ; i<labels.length; i++){
+            if(verifyTypeOfLabel(labels[i])==true){
+                putLabelOnIndexes(labelIndexes[i]);
+            }
+        }
+    }
+
+    changeNameLabel();
+
+    {% for i in nbColumns %}
+    var myChart = new Chart(document.getElementById('graph{{ i }}').getContext('2d'), {
+        type: 'bar',
+        options: {
+            title:{
+                display:true,
+                text:getTitleString(labels[{{ i - 1 }}]),
+            },
+
+            scales:{
+
+                xAxes : [{
+                    scaleLabel:{
+                        display: true,
+                        labelString : getXAxesString(labels[{{ i - 1 }}]),
+                    },
+                    barPercentage: 1.25,
+                    ticks:{
+                        autoSkip: false,
+
+                    }
+
+                }],
+                yAxes : [{
+                    scaleLabel: {
+                        display:true,
+                        labelString:'En nombre de personnes',
+                    },
+                    ticks: {
+                        beginAtZero: true,
+                        stepSize:1,
+                    },
+                }],
+            }
+        },
+        data: {
+            datasets: [
+                {
+                    data: data[{{ i - 1 }}], //METTRE LA QUANTITE DE PERSONNES A PARTIR DE LA NOUVELLE VAR
+                    label: labels[{{ i - 1 }}],
+                    backgroundColor: '#'+((1<<24)*Math.random()|0).toString(16),
+                    fill: true,
+                },
+            ],
+            labels: indexes[{{ i - 1 }}],
+            options: {
+                responsive: false,
+                maintainAspectRatio: true,
+            }
+        },
+
+
+    });
+    {% endfor %}
+
+
+
+
+</script>
+{% endblock %}
+
+{% block body %}
+    <style>
+        #content{
+            background-color: lightgreen;
+            text-align: center;
+        }
+        #selection{
+            width: 100%;
+            background-color: lightgray;
+        }
+        canvas{
+            width: 100%;
+            background-color: lightblue;
+        }
+    </style>
+
+
+    <h1>Graphiques de la population de patients du service</h1>
+
+    <div id="content">
+
+        <div id="selection">
+            {{ form(form) }}
+        </div>
+
+        <div id="canvas-holder">
+            {% for i in nbColumns %}
+                <canvas id="graph{{ i }}">
+
+                </canvas>
+                <br>
+            {% endfor %}
+        </div>
+
+    </div>
+{% endblock %}

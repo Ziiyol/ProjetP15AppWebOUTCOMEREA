@@ -1,0 +1,12 @@
+{%extends 'base.html.twig' %}
+
+{%block body%}
+
+
+{{form_start(form)}}
+{{form_row(form.mail, {'label' : 'Adresse Email', 'attr' : {'placeholder' : 'Adresse Email ...'}})}}
+{{form_row(form.role, {'label' : 'role'})}}
+<button type="submit" class="btn btn-success">Ajouter ! </button>
+{{form_end(form)}}
+
+{%endblock %}

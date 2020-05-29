@@ -1,0 +1,61 @@
+/* Feuille de style pour Gigondas  */
+
+body {
+	color: black;
+	background: white; 
+	font-family:    Trebuchet MS, Cantarell, sans-serif;
+    margin: 5Px auto;
+    width: 1200px;
+}
+
+#bandeau > img { width: 50%;margin-left: auto;
+    margin-right: auto;
+    display: block;}
+
+fieldset {
+    float: left;
+    margin: 10px 10px;
+    border: 1px solid #EC4C4E;
+}
+
+legend {
+    padding: 3px 5px;
+    font-weight: bold;
+	color: white;
+	background-color: #EC4C4E; 
+}
+
+h1 {
+    margin: 18px 0px;
+    padding: 10px 5px;
+	font-size: 1.2em;
+	color: white;
+	background: #EC4C4E; 
+	text-align: center;
+}
+
+a:link    {text-decoration: none; font-weight: bold; color: #999999; }
+a:visited {text-decoration: none; font-weight: bold; color:    #999999; }
+a:active  {text-decoration: none; color: black; }
+a:hover   {text-decoration: none; color:white; background: #999999; cursor: pointer; }
+
+th { color: white; background: #EC4C4E; border: thin solid white;}
+td { font-size: .92em; border: thin solid #E43134; }
+th, td {
+	padding: 3px 5px;
+	vertical-align: middle;
+}
+
+table { border-collapse: collapse; }
+/* Couleur des lignes impaires */
+table tr:nth-child(odd) {
+   background-color: #CCCCFF; 
+}
+
+/* Pour les messages d'erreurs */
+p.erreur {
+   text-align: center;
+   color: red;
+   font-weight: bold;
+}
+

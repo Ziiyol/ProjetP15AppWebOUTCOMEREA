@@ -1,0 +1,36 @@
+{%extends 'base.html.twig' %}
+{%block body %}
+<h1> liste des utilisateurs </h1>
+
+<table class="table">
+  <thead>
+    <th> id</th>
+    <th> Email</th>
+    <th> rôle </th>
+    <th> modifier </th>
+    <th> supprimer </th>
+  </thead>
+
+  <tbody>
+  {%for users in user%}
+  <tr>
+  <td> {{users.id}} </td>
+    <td> {{users.mail}}</td>
+  <td>
+  {% for roles in users.role %}
+  {{roles}}
+    {% endfor %}
+  </td>
+  <td> <a href="{{path('listUsers', {'id':users.id})}}" class="btn btn-outline-warning">  Modifier </a>  </td>
+  <td> <a href="{{path('deleteusers', {'id':users.id})}}" class="btn btn-outline-danger">  Supprimer </a>  </td>
+    </tr>
+
+  {% else %}
+  <tr>
+    <td colspan=5> Il n'y a pas d'utilisateur inscrit </td>
+    </tr>
+
+    {% endfor %}
+  </tbody>
+  </table>
+{%endblock%}

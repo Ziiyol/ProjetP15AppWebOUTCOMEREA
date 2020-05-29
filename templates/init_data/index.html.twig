@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Données initiales{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+
+        });
+    </script>
+{% endblock %}
+{% block body %}
+<style>
+    #content{
+        text-align: center;
+    }
+</style>
+
+    <h1>Vous allez générer des graphiques sur la répartition de la population</h1>
+
+    <div id="content">
+     
+
+        <form method="post" action="{{ path('init_graph') }}">
+            <button type="submit" name="group">Générer les graphiques pour les patients du service</button>
+        </form>
+
+
+    </div>
+
+{% endblock %}

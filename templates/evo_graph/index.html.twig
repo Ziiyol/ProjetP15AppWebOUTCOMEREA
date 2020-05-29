@@ -1,0 +1,155 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Graphique(s) des données <évolutives></évolutives>!{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+
+        var stringTitle = "Représentation graphique de l'évolution ";
+        var temp = 1;
+        var dates = [];
+        {% for d in dates %}
+            dates.push("{{ d.dtdonnevo }} jour n°" + temp);
+            temp += 1;
+        {% endfor %}
+
+        var data = [];
+        {% for columns in data %}
+            var values = [];
+            {% for values in columns %}
+                if ("{{ values }}" == ""){
+                    values.push(null);
+                }else {
+                    values.push("{{ values }}");
+                }
+            {% endfor %}
+            data.push(values);
+        {% endfor %}
+
+        var labels = [];
+        {% for dat in tabSelectedColumns %}
+            labels.push("{{ dat }}");
+
+        {% endfor %}
+
+        function getYAxesString(labelString){
+            switch (labelString) {
+                case "minTemp" :
+                    return "Température (en °C)";
+                case "maxTemp":
+                    return "Température (en °C)";
+                case "minfc" :
+                    return "Battements par minutes";
+                case "maxfc":
+                    return "Battements par minutes";
+                case "intubation":
+                    return "Intubation";
+                case "freqresp" :
+                    return "Cycles respiratoires par minutes";
+            }
+        }
+
+       function getTitleString( labelString){
+            switch (labelString) {
+                case "minTemp" :
+                    return stringTitle+" de la température minimale du patient";
+                case "maxTemp":
+                    return stringTitle+" de la température maximale du patient";
+                case "minfc":
+                    return stringTitle+" de la fréquence cardiaque minimale du patient";
+                case "maxfc":
+                    return stringTitle+" de la fréquence cardiaque maximale du patient";
+                case "intubation":
+                    return stringTitle+" de l'intubation' du patient";
+                case "freqresp" :
+                    return stringTitle+" des cycles respiratoires du patient";
+            }
+        }
+
+
+
+        {% for i in nbColumns %}
+            var myChart = new Chart(document.getElementById('graph{{ i }}').getContext('2d'), {
+                type: 'line',
+                options: {
+                    title:{
+                        display:true,
+                        text:getTitleString(labels[{{ i - 1 }}]),
+                    },
+
+                    scales:{
+
+                        xAxes : [{
+                            scaleLabel:{
+                                display: true,
+                                labelString : 'Temps (en jour)',
+                            }
+
+                        }],
+                        yAxes : [{
+                            scaleLabel: {
+                                display:true,
+                                labelString:getYAxesString(labels[{{ i - 1 }}]),
+                            }
+                        }],
+                    }
+                },
+                data: {
+                    datasets: [
+                        {
+                            data: data[{{ i - 1 }}],
+                            label: labels[{{ i - 1 }}],
+                            borderColor: '#'+((1<<24)*Math.random()|0).toString(16),
+                            fill: false
+                        },
+                    ],
+                    labels: dates,
+                    options: {
+                        responsive: false,
+                        maintainAspectRatio: true,
+                    }
+                },
+
+
+            });
+        {% endfor %}
+
+        $(document).ready(function() {
+
+        });
+    </script>
+{% endblock %}
+{% block body %}
+    <style>
+        #content{
+            background-color: lightgreen;
+            text-align: center;
+        }
+        #selection{
+            background-color: lightgray;
+        }
+        canvas{
+            background-color: lightblue;
+        }
+    </style>
+
+
+    <h1>Graphiques du patient {{ idPat }}</h1>
+
+    <div id="content">
+
+        <div id="selection">
+            {{ form(form) }}
+        </div>
+
+        <div id="canvas-holder">
+            {% for i in nbColumns %}
+                <canvas id="graph{{ i }}">
+
+                </canvas>
+                <br>
+            {% endfor %}
+        </div>
+
+    </div>
+
+{% endblock %}

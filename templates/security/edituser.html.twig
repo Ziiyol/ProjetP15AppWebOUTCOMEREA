@@ -1,0 +1,24 @@
+
+{%extends 'base.html.twig' %}
+
+{%block body%}
+
+  <div class= "form-group">
+{{form_start(userForm)}}
+
+  </div>
+
+  <div class= "form-group">
+   <label> choix du rôle</label>
+{{form_row(userForm.role, {} )}}
+</div>
+
+
+<button type="submit" class="btn btn-success">Modifier ! </button>
+
+
+
+{{form_end(userForm)}}
+
+
+{%endblock %}

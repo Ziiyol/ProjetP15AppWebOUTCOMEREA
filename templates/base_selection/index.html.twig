@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Choisisser les données à visualiser !{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+
+
+
+
+    </script>
+{% endblock %}
+{% block body %}
+<style>
+    #choice {
+        text-align: center;
+        column-count: 2;
+        padding: 10%;
+    }
+</style>
+
+    <h1>Sélectionner le type de données à visualiser</h1>
+
+    <div id="choice">
+        <form method="post" action="{{ path('init_data') }}">
+            <input type="submit" value="Visualisation des données initiales"/>
+            
+
+        </form>
+
+        <form method="post" action="{{ path('evo_data') }}">
+            <input type="submit" value="Visualisation des données évolutives"/>
+           
+
+        </form>
+    </div>
+
+{% endblock %}

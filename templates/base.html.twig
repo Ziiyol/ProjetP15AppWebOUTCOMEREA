@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Bienvenue !{% endblock %}</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('img/uga.ico') }}" />
+    <link rel="stylesheet" type="text/css" href="{{asset('css/bootstrap.min.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{asset('css/fontawesome-all.min.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{asset('css/Chart.min.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{asset('https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.2/css/bootstrap-slider.min.css')}}" />
+    {% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{asset('css/main.css')}}" />
+    {% endblock %}
+
+</head>
+<body class="container">
+    {% block header %}
+
+
+    <div class="row">
+        <div id="bandeau" class="col-md-12">
+            <img src="{{asset('img/BandeauOutcomeRea.png')}}" alt="Bandeau OutcomeRea"/>
+        </div>
+
+
+
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link active" href="{{ path('base_selection') }}" >Accueil</a>
+          </li>
+
+          {% if app.user%}
+
+          {% if app.user.role[0] == "ROLE_ADMIN"%}
+
+
+      <li class="nav-item">
+        <a class="nav-link active" href="{{ path('security_account') }}" >Ajouter Compte</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link active" href="{{ path('listeUsers') }}" >Gestions des comptes</a>
+      </li>
+
+
+{%endif%}
+    <li class="nav-item">
+        <a class="nav-link" href="{{ path('security_logout') }}">Déconnexion</a>
+    </li>
+
+
+
+{%else%}
+
+<li class="nav-item">
+    <a class="nav-link" href="{{ path('app_login') }}">Connexion</a>
+</li>
+
+
+{%endif%}
+
+<li class="nav-item">
+      <a class="nav-link" href="{{ path('app_remove_password') }}">Réinitialiser mot de passe</a>
+</li>
+
+
+</div>
+
+
+    {% endblock %}
+    {% block menu %}{% endblock %}
+    {% block body %}{% endblock %}
+    <script src="{{asset('js/jquery-3.4.1.min.js')}}"></script>
+    <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{asset('js/Chart.bundle.min.js')}}"></script>
+    <script src="{{asset('https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.2/bootstrap-slider.min.js')}}"></script>
+    {% block javascripts %}
+    {% endblock %}
+</body>
+</html>
